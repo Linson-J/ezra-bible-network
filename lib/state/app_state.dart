@@ -6,25 +6,35 @@ import '../config/env.dart';
 import '../models/app_config.dart';
 import '../models/app_content.dart';
 import '../models/program.dart';
+import '../models/social_post.dart';
 import '../models/verse.dart';
 import '../repositories/repository_provider.dart';
 import '../services/notification_service.dart';
 import '../services/player_service.dart';
 import '../services/settings_service.dart';
+import '../services/social_feed_service.dart';
 
 /// App-wide data loaded through the repositories, plus the long-lived player.
 class AppState extends ChangeNotifier {
-  AppState({required this.repos, required this.settings, NotificationService? notifications})
-      : notifications = notifications ?? NotificationService.instance;
+  AppState({required this.repos, required this.settings, NotificationService? notifications, SocialFeedService? social})
+    : notifications = notifications ?? NotificationService.instance,
+      social = social ?? SocialFeedService();
 
   final Repositories repos;
   final SettingsService settings;
   final NotificationService notifications;
+  final SocialFeedService social;
+
+  /// Latest videos and posts for the More tab; empty until loaded or on failure.
+  List<SocialPost> youtubeVideos = const [];
+  List<SocialPost> instagramPosts = const [];
+  bool socialLoading = false;
 
   AppConfig config = const AppConfig();
   AppContent content = const AppContent();
   List<Program> schedule = const [];
   Verse? todayVerse;
+  Verse? yesterdayVerse;
   DateTime? _verseDate;
   String appVersion = '';
   String? scheduleError;
@@ -40,8 +50,7 @@ class AppState extends ChangeNotifier {
   /// Config stream URLs win when set; otherwise .env.
   List<String> get streamUrls {
     final primary = config.streamUrl.isNotEmpty ? config.streamUrl : Env.streamUrl;
-    final backup =
-        config.streamBackupUrl.isNotEmpty ? config.streamBackupUrl : (Env.streamBackupUrl ?? '');
+    final backup = config.streamBackupUrl.isNotEmpty ? config.streamBackupUrl : (Env.streamBackupUrl ?? '');
     return [primary, if (backup.isNotEmpty && backup != primary) backup];
   }
 
@@ -51,12 +60,7 @@ class AppState extends ChangeNotifier {
     final info = await PackageInfo.fromPlatform();
     appVersion = info.version;
 
-    await Future.wait([
-      _loadConfig(),
-      _loadContent(),
-      _loadSchedule(),
-      refreshTodayVerse(),
-    ]);
+    await Future.wait([_loadConfig(), _loadContent(), _loadSchedule(), refreshTodayVerse()]);
 
     _player = PlayerService(
       urls: streamUrls,
@@ -67,7 +71,10 @@ class AppState extends ChangeNotifier {
 
     // Fire-and-forget: keep notification scheduling off the startup path.
     rescheduleDailyVerses();
-    _resyncReminders();
+    // Programme reminders were removed from the app; cancel any left from
+    // earlier versions.
+    clearAllReminders();
+    loadSocial();
     notifyListeners();
   }
 
@@ -97,6 +104,29 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  /// Fetches the YouTube and Instagram strips. Failures leave them empty;
+  /// the More tab then just links to the profiles.
+  Future<void> loadSocial() async {
+    if (socialLoading) return;
+    socialLoading = true;
+    notifyListeners();
+    final token = Env.instagramAccessToken;
+    await Future.wait([
+      if (content.youtubeChannelId.isNotEmpty)
+        social.youtube(content.youtubeChannelId).then((v) => youtubeVideos = v).catchError((Object e) {
+          debugPrint('YouTube feed failed: $e');
+          return youtubeVideos;
+        }),
+      if (token.isNotEmpty)
+        social.instagram(token).then((v) => instagramPosts = v).catchError((Object e) {
+          debugPrint('Instagram feed failed: $e');
+          return instagramPosts;
+        }),
+    ]);
+    socialLoading = false;
+    notifyListeners();
+  }
+
   Future<void> reloadSchedule() async {
     await _loadSchedule();
     notifyListeners();
@@ -110,6 +140,8 @@ class AppState extends ChangeNotifier {
     try {
       todayVerse = await repos.verse.getVerseFor(today);
       _verseDate = today;
+      notifyListeners();
+      yesterdayVerse = await repos.verse.getVerseFor(today.subtract(const Duration(days: 1)));
       notifyListeners();
     } catch (e) {
       debugPrint('Verse load failed: $e');
@@ -164,40 +196,6 @@ class AppState extends ChangeNotifier {
     } catch (e) {
       debugPrint('Scheduling daily verses failed: $e');
     }
-  }
-
-  /// Re-applies saved reminders against the current schedule (times may have
-  /// changed) and drops reminders for programs that no longer exist.
-  Future<void> _resyncReminders() async {
-    if (schedule.isEmpty) return;
-    final byId = {for (final p in schedule) p.id: p};
-    for (final id in settings.reminders) {
-      final p = byId[id];
-      try {
-        if (p == null) {
-          await notifications.cancelProgramReminder(id);
-          await settings.setReminder(id, false);
-        } else {
-          await notifications.scheduleProgramReminder(p);
-        }
-      } catch (e) {
-        debugPrint('Reminder resync failed for $id: $e');
-      }
-    }
-  }
-
-  /// Returns false if notifications aren't permitted (nothing scheduled).
-  Future<bool> setReminder(Program p, bool on) async {
-    if (on) {
-      if (!await notifications.areEnabled() && !await notifications.requestPermission()) {
-        return false;
-      }
-      await notifications.scheduleProgramReminder(p);
-    } else {
-      await notifications.cancelProgramReminder(p.id);
-    }
-    await settings.setReminder(p.id, on);
-    return true;
   }
 
   Future<void> clearAllReminders() async {

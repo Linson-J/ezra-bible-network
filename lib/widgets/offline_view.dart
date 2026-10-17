@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../services/player_service.dart';
 import '../theme/app_theme.dart';
+import 'ios_press.dart';
 
 /// Shown over the player when the stream can't play.
 class OfflineView extends StatelessWidget {
@@ -30,7 +31,7 @@ class OfflineView extends StatelessWidget {
         : message;
 
     return Container(
-      color: Colors.black,
+      color: AppColors.video,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: Center(
         child: FittedBox(
@@ -40,7 +41,7 @@ class OfflineView extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, color: AppColors.gold, size: 40),
+                Icon(icon, color: AppColors.accent, size: 40),
                 const SizedBox(height: 10),
                 Text(title,
                     style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w600)),
@@ -52,15 +53,17 @@ class OfflineView extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    FilledButton.icon(
+                    IosPress(
+                      child: FilledButton.icon(
                       onPressed: onRetry,
                       style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.gold,
-                        foregroundColor: const Color(0xFF231A00),
+                        backgroundColor: AppColors.accent,
+                        foregroundColor: AppColors.onAccent,
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       ),
                       icon: const Icon(Icons.refresh_rounded, size: 18),
                       label: Text(status == PlayerStatus.offAir ? 'Try anyway' : 'Retry now'),
+                    ),
                     ),
                     if (retryInSeconds > 0) ...[
                       const SizedBox(width: 12),

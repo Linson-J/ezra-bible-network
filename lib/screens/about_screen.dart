@@ -12,7 +12,7 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.watch<AppState>().content;
     return Scaffold(
-      appBar: AppBar(title: const Text('About')),
+      appBar: AppBar(title: const Text('ABOUT')),
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
@@ -20,7 +20,7 @@ class AboutScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Center(
             child: Text(AppConstants.appName,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: context.palette.gold)),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: context.palette.accent)),
           ),
           const SizedBox(height: 24),
           Text(c.about, style: const TextStyle(fontSize: 16, height: 1.6)),
@@ -29,7 +29,7 @@ class AboutScreen extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.place_rounded, color: context.palette.gold),
+                Icon(Icons.place_rounded, color: context.palette.accent),
                 const SizedBox(width: 12),
                 Expanded(child: Text(c.address, style: TextStyle(color: context.palette.textMuted, height: 1.4))),
               ],

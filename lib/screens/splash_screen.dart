@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../config/app_constants.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
+import '../widgets/ios_press.dart';
 import 'home_shell.dart';
 
 /// Shows the logo while notifications, config, content, schedule and the
@@ -51,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
           gradient: RadialGradient(
             center: Alignment(0, -0.2),
             radius: 1.1,
-            colors: [Color(0xFF2B1F78), AppColors.background],
+            colors: [Color(0xFF0B3A52), AppColors.background],
           ),
         ),
         child: SafeArea(
@@ -65,20 +66,20 @@ class _SplashScreenState extends State<SplashScreen> {
                   const SizedBox(height: 24),
                   const Text(
                     AppConstants.appName,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.gold),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.accent),
                   ),
                   const SizedBox(height: 32),
                   if (_error == null)
                     const SizedBox(
                       width: 28,
                       height: 28,
-                      child: CircularProgressIndicator(strokeWidth: 2.5, color: AppColors.gold),
+                      child: CircularProgressIndicator(strokeWidth: 2.5, color: AppColors.accent),
                     )
                   else ...[
                     Text('Something went wrong while starting.\n$_error',
                         textAlign: TextAlign.center, style: const TextStyle(color: AppColors.textMuted)),
                     const SizedBox(height: 16),
-                    FilledButton(onPressed: _start, child: const Text('Try again')),
+                    IosPress(child: FilledButton(onPressed: _start, child: const Text('Try again'))),
                   ],
                 ],
               ),

@@ -12,20 +12,11 @@ class AnnouncementBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: context.palette.gold.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: context.palette.gold.withValues(alpha: 0.5)),
+        color: context.palette.accentFill.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(6),
+        border: Border(left: BorderSide(color: context.palette.accentFill, width: 3)),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(Icons.campaign_rounded, color: context.palette.gold),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(text, style: TextStyle(color: context.palette.text, fontSize: 15, height: 1.35)),
-          ),
-        ],
-      ),
+      child: Text(text, style: TextStyle(color: context.palette.text, fontSize: 15, height: 1.35)),
     );
   }
 }

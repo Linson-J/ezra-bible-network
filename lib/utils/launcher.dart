@@ -25,6 +25,18 @@ class Launcher {
     return _open(context, uri);
   }
 
+  /// Opens an Instagram or YouTube link in its app when installed (so the
+  /// profile or video opens directly), otherwise in the browser.
+  static Future<bool> social(BuildContext context, String url) async {
+    final uri = Uri.tryParse(url.trim());
+    if (uri == null || url.trim().isEmpty) return false;
+    try {
+      if (await launchUrl(uri, mode: LaunchMode.externalNonBrowserApplication)) return true;
+    } catch (_) {}
+    if (!context.mounted) return false;
+    return _open(context, uri);
+  }
+
   static Future<bool> call(BuildContext context, String phone) =>
       _open(context, Uri(scheme: 'tel', path: _phone(phone)), failMessage: 'No app can place calls');
 

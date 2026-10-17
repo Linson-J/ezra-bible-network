@@ -48,9 +48,22 @@ class EzraApp extends StatelessWidget {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: themeMode,
+      scrollBehavior: const _IosScrollBehavior(),
       home: const SplashScreen(),
     );
   }
+}
+
+/// iPhone-style rubber-band scrolling everywhere, without the Android glow.
+class _IosScrollBehavior extends MaterialScrollBehavior {
+  const _IosScrollBehavior();
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) =>
+      const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
+
+  @override
+  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) => child;
 }
 
 /// Shown instead of the app when .env is missing or invalid.
@@ -74,8 +87,7 @@ class ConfigErrorApp extends StatelessWidget {
               children: [
                 const Icon(Icons.error_outline_rounded, color: AppColors.live, size: 48),
                 const SizedBox(height: 16),
-                const Text('Configuration error',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+                const Text('Configuration error', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 12),
                 SelectableText(message, style: const TextStyle(fontSize: 15, height: 1.5)),
               ],

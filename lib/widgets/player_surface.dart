@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../services/player_service.dart';
 import '../theme/app_theme.dart';
 import 'live_badge.dart';
+import 'lottie_badge.dart';
 import 'offline_view.dart';
 
 /// The 16:9 video area: player, LIVE badge, audio-only artwork and
@@ -33,7 +34,7 @@ class PlayerSurface extends StatelessWidget {
           if (c != null) BetterPlayer(controller: c),
           if (player.audioOnly && !failed) _AudioOnlyArt(compact: compact),
           if (c == null && player.status == PlayerStatus.loading)
-            const Center(child: CircularProgressIndicator(color: AppColors.gold)),
+            Center(child: LottieBadge(AppAnimation.live, size: compact ? 48 : 96)),
           if (failed && !compact)
             OfflineView(
               status: player.status,
@@ -67,7 +68,7 @@ class _AudioOnlyArt extends StatelessWidget {
     // Absorbs taps so the hidden video's controls don't pop up.
     return AbsorbPointer(
       child: DecoratedBox(
-        decoration: const BoxDecoration(gradient: AppColors.brandGradient),
+        decoration: const BoxDecoration(color: AppColors.video),
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -78,7 +79,7 @@ class _AudioOnlyArt extends StatelessWidget {
                 const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.headphones_rounded, color: AppColors.gold, size: 18),
+                    Icon(Icons.headphones_rounded, color: AppColors.accent, size: 18),
                     SizedBox(width: 6),
                     Text('Audio only', style: TextStyle(color: Colors.white70)),
                   ],

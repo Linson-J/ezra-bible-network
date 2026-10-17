@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,14 +9,14 @@ import '../services/native_bridge.dart';
 import '../services/player_service.dart';
 import '../services/settings_service.dart';
 import '../state/app_state.dart';
-import '../theme/app_theme.dart';
 import '../utils/launcher.dart';
+import '../widgets/app_bottom_bar.dart';
+import '../widgets/ios_press.dart';
 import 'live_screen.dart';
 import 'more_screen.dart';
-import 'schedule_screen.dart';
 import 'verse_screen.dart';
 
-/// Bottom navigation: Live, Schedule, Verse, More.
+/// Bottom navigation: Live, Verse, More.
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
 
@@ -51,7 +52,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
   }
 
   void _openPayload(String payload) {
-    if (payload == AppConstants.payloadVerse) _app.tab.value = 2;
+    if (payload == AppConstants.payloadVerse) _app.tab.value = 1;
     if (payload == AppConstants.payloadLive) _app.tab.value = 0;
   }
 
@@ -76,44 +77,41 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
       await settings.markBatteryPromptShown();
       if (await NativeBridge.instance.isIgnoringBatteryOptimizations()) return;
       if (!mounted) return;
-      final open = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          icon: Icon(Icons.battery_saver_rounded, color: context.palette.gold),
-          title: const Text('Keep the stream playing'),
-          content: const Text(
+      final open = await showIosAlert<bool>(
+        context,
+        title: 'Keep the stream playing',
+        message:
             'Android\'s battery optimisation can stop the live stream in the background '
             'and delay your daily verse.\n\nOn the next screen, choose "All apps", find '
             'Ezra Bible Network and select "Don\'t optimise".',
-          ),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Not now')),
-            FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Open settings')),
-          ],
-        ),
+        actions: [('Not now', false, false), ('Open settings', true, true)],
       );
       if (open == true) await NativeBridge.instance.openBatteryOptimizationSettings();
     }
   }
 
-  Future<void> _showUpdateDialog() => showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (ctx) => PopScope(
-          canPop: false,
-          child: AlertDialog(
-            title: const Text('Update required'),
-            content: const Text('A new version of Ezra Bible Network is available. '
-                'Please update to continue.'),
-            actions: [
-              FilledButton(
-                onPressed: () => Launcher.url(ctx, AppConstants.playStoreUrl),
-                child: const Text('Update'),
-              ),
-            ],
-          ),
+  // The Update action opens the store and leaves the alert up, so the app
+  // stays blocked until it is updated.
+  Future<void> _showUpdateDialog() => showCupertinoDialog<void>(
+    context: context,
+    builder: (ctx) => PopScope(
+      canPop: false,
+      child: CupertinoAlertDialog(
+        title: const Text('Update required'),
+        content: const Text(
+          'A new version of Ezra Bible Network is available. '
+          'Please update to continue.',
         ),
-      );
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () => Launcher.url(ctx, AppConstants.playStoreUrl),
+            child: const Text('Update'),
+          ),
+        ],
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -127,32 +125,9 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
             // In PiP only the Live tab (which then shows just the video) is visible.
             final index = inPip ? 0 : tab;
             return Scaffold(
-              body: IndexedStack(
-                index: index,
-                children: const [LiveScreen(), ScheduleScreen(), VerseScreen(), MoreScreen()],
-              ),
-              bottomNavigationBar: inPip
-                  ? null
-                  : NavigationBar(
-                      selectedIndex: index,
-                      onDestinationSelected: (i) => _app.tab.value = i,
-                      destinations: const [
-                        NavigationDestination(
-                            icon: Icon(Icons.live_tv_outlined),
-                            selectedIcon: Icon(Icons.live_tv_rounded),
-                            label: 'Live'),
-                        NavigationDestination(
-                            icon: Icon(Icons.calendar_month_outlined),
-                            selectedIcon: Icon(Icons.calendar_month_rounded),
-                            label: 'Schedule'),
-                        NavigationDestination(
-                            icon: Icon(Icons.menu_book_outlined),
-                            selectedIcon: Icon(Icons.menu_book_rounded),
-                            label: 'Verse'),
-                        NavigationDestination(
-                            icon: Icon(Icons.more_horiz_rounded), label: 'More'),
-                      ],
-                    ),
+              extendBody: true,
+              body: IndexedStack(index: index, children: const [LiveScreen(), VerseScreen(), MoreScreen()]),
+              bottomNavigationBar: inPip ? null : AppBottomBar(index: index, onSelect: (i) => _app.tab.value = i),
             );
           },
         ),

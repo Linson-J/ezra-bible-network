@@ -5,9 +5,9 @@ import '../config/app_constants.dart';
 import '../services/player_service.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_bottom_bar.dart';
 import '../widgets/announcement_banner.dart';
-import '../widgets/minute_ticker.dart';
-import '../widgets/now_playing_card.dart';
+import '../widgets/lottie_badge.dart';
 import '../widgets/player_controls_bar.dart';
 import '../widgets/player_surface.dart';
 import '../widgets/verse_card.dart';
@@ -45,29 +45,25 @@ class LiveScreen extends StatelessWidget {
             const Text(AppConstants.appName),
           ],
         ),
+        actions: const [Padding(padding: EdgeInsets.only(right: 14), child: LottieBadge(AppAnimation.live, size: 40))],
       ),
       body: Column(
         children: [
-          AspectRatio(aspectRatio: 16 / 9, child: surface),
+          ColoredBox(
+            color: AppColors.video,
+            child: AspectRatio(aspectRatio: 16 / 9, child: surface),
+          ),
           PlayerControlsBar(player: player),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+              padding: EdgeInsets.fromLTRB(18, 8, 18, AppBottomBar.clearance(context)),
               children: [
                 if (app.config.announcement.trim().isNotEmpty) ...[
                   AnnouncementBanner(text: app.config.announcement.trim()),
                   const SizedBox(height: 14),
                 ],
-                MinuteTicker(
-                  builder: (context, now) => NowPlayingCard(
-                    current: app.currentProgram(now),
-                    next: app.nextProgram(now),
-                    onTap: () => app.tab.value = 1,
-                  ),
-                ),
-                const SizedBox(height: 14),
                 if (app.todayVerse != null)
-                  VerseCard(verse: app.todayVerse!, onTap: () => app.tab.value = 2)
+                  VerseCard(verse: app.todayVerse!, onTap: () => app.tab.value = 1)
                 else
                   const SizedBox.shrink(),
                 if (player.audioOnly) ...[

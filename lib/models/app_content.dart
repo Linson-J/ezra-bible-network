@@ -10,6 +10,7 @@ class AppContent {
     this.facebookUrl = '',
     this.instagramUrl = '',
     this.websiteUrl = '',
+    this.youtubeChannelId = '',
   });
 
   final String about;
@@ -22,6 +23,9 @@ class AppContent {
   final String instagramUrl;
   final String websiteUrl;
 
+  /// "UC…" id; its public feed supplies the latest videos on the More tab.
+  final String youtubeChannelId;
+
   factory AppContent.fromJson(Map<String, dynamic> json) => AppContent(
         about: json['about'] as String? ?? '',
         address: json['address'] as String? ?? '',
@@ -32,6 +36,7 @@ class AppContent {
         facebookUrl: json['facebookUrl'] as String? ?? '',
         instagramUrl: json['instagramUrl'] as String? ?? '',
         websiteUrl: json['websiteUrl'] as String? ?? '',
+        youtubeChannelId: json['youtubeChannelId'] as String? ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -44,5 +49,6 @@ class AppContent {
         'facebookUrl': facebookUrl,
         'instagramUrl': instagramUrl,
         'websiteUrl': websiteUrl,
+        'youtubeChannelId': youtubeChannelId,
       };
 }

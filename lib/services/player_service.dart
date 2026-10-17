@@ -152,9 +152,9 @@ class PlayerService extends ChangeNotifier with WidgetsBindingObserver {
           enableQualities: true,
           enableOverflowMenu: true,
           liveTextColor: Colors.transparent, // We draw our own LIVE badge.
-          loadingColor: Color(0xFFD4AF37),
-          progressBarPlayedColor: Color(0xFFD4AF37),
-          progressBarHandleColor: Color(0xFFD4AF37),
+          loadingColor: Color(0xFF7CCFF5),
+          progressBarPlayedColor: Color(0xFF7CCFF5),
+          progressBarHandleColor: Color(0xFF7CCFF5),
           controlBarColor: Color(0x99000000),
         ),
       );

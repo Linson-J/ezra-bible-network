@@ -118,7 +118,7 @@ class NotificationService {
             AppConstants.verseChannelName,
             styleInformation: BigTextStyleInformation(v.text),
             icon: '@drawable/ic_notification',
-            color: _gold,
+            color: _accent,
           ),
         ),
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
@@ -169,7 +169,7 @@ class NotificationService {
           importance: Importance.high,
           priority: Priority.high,
           icon: '@drawable/ic_notification',
-          color: _gold,
+          color: _accent,
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
@@ -182,5 +182,5 @@ class NotificationService {
       _plugin.cancel(id: reminderId(programId));
 }
 
-/// Accent colour for notification icons (gold).
-const _gold = Color(0xFFD4AF37);
+/// Accent colour for notification icons (light blue).
+const _accent = Color(0xFF0284C7);

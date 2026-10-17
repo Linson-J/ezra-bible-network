@@ -2,70 +2,41 @@ import 'package:flutter/material.dart';
 
 import '../models/verse.dart';
 import '../theme/app_theme.dart';
+import 'ios_press.dart';
 
-/// Verse of the day. [large] is used on the Verse tab.
+/// Today's verse, shown on the Live tab.
 class VerseCard extends StatelessWidget {
-  const VerseCard({super.key, required this.verse, this.onTap, this.large = false});
+  const VerseCard({super.key, required this.verse, this.onTap});
 
   final Verse verse;
   final VoidCallback? onTap;
-  final bool large;
 
   @override
   Widget build(BuildContext context) {
-    final textScale = large ? 1.0 : 0.72;
-    return Container(
-      decoration: BoxDecoration(
-        gradient: context.palette.verseGradient,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: context.palette.gold.withValues(alpha: 0.35)),
-      ),
-      child: Material(
-        type: MaterialType.transparency,
+    final p = context.palette;
+    return IosPress(
+      scale: 0.98,
+      child: Card(
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
-          borderRadius: BorderRadius.circular(20),
           onTap: onTap,
           child: Padding(
-            padding: EdgeInsets.all(large ? 28 : 18),
+            padding: const EdgeInsets.all(18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.auto_stories_rounded, color: context.palette.gold, size: 18),
-                    const SizedBox(width: 8),
-                    Text('VERSE OF THE DAY',
-                        style: TextStyle(
-                          color: context.palette.gold,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.4,
-                        )),
-                  ],
-                ),
-                SizedBox(height: large ? 22 : 12),
-                if (large)
-                  Icon(Icons.format_quote_rounded, color: context.palette.gold, size: 36),
+                Text('TODAY\'S WORD', style: AppText.eyebrow(p.textMuted, size: 12)),
+                const SizedBox(height: 12),
                 Text(
                   verse.text,
-                  maxLines: large ? null : 4,
-                  overflow: large ? null : TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: AppTheme.verseFont,
-                    fontSize: 26 * textScale,
-                    height: 1.5,
-                    color: context.palette.text,
-                  ),
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontFamily: AppText.verseFont, fontSize: 22, height: 1.3, color: p.text),
                 ),
-                SizedBox(height: large ? 20 : 10),
+                const SizedBox(height: 12),
                 Text(
                   verse.reference,
-                  style: TextStyle(
-                    fontFamily: AppTheme.verseFont,
-                    fontSize: large ? 20 : 15,
-                    fontWeight: FontWeight.w700,
-                    color: context.palette.goldLight,
-                  ),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: p.text),
                 ),
               ],
             ),

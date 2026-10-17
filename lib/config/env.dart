@@ -78,6 +78,10 @@ class Env {
   /// Base URL without trailing slash.
   static String get apiBaseUrl => _get('API_BASE_URL').replaceAll(RegExp(r'/+$'), '');
 
+  /// Optional Instagram API token (instagram_business_basic) for the recent
+  /// posts strip on the More tab. Without it the tab links to the profile.
+  static String get instagramAccessToken => _get('INSTAGRAM_ACCESS_TOKEN');
+
   static int get dailyVerseHour => _int('DAILY_VERSE_HOUR', 6, 0, 23);
   static int get dailyVerseMinute => _int('DAILY_VERSE_MINUTE', 30, 0, 59);
 }
