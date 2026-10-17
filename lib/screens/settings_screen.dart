@@ -8,7 +8,7 @@ import '../theme/app_theme.dart';
 import '../widgets/section_header.dart';
 import '../widgets/verse_notification_settings.dart';
 
-/// Notification and playback settings.
+/// Appearance, notification and playback settings.
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -57,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> with WidgetsBindingObse
     final reminderCount = settings.reminders.length;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Notification settings')),
+      appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 32),
         children: [
@@ -65,9 +65,9 @@ class _SettingsScreenState extends State<SettingsScreen> with WidgetsBindingObse
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               child: Card(
-                color: AppColors.live.withValues(alpha: 0.15),
+                color: context.palette.live.withValues(alpha: 0.15),
                 child: ListTile(
-                  leading: const Icon(Icons.notifications_off_rounded, color: AppColors.live),
+                  leading: Icon(Icons.notifications_off_rounded, color: context.palette.live),
                   title: const Text('Notifications are turned off'),
                   subtitle: const Text('Tap to allow notifications'),
                   onTap: () async {
@@ -78,6 +78,21 @@ class _SettingsScreenState extends State<SettingsScreen> with WidgetsBindingObse
                 ),
               ),
             ),
+          const SectionHeader('Appearance'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: SegmentedButton<ThemeMode>(
+              showSelectedIcon: false,
+              segments: const [
+                ButtonSegment(
+                    value: ThemeMode.system, icon: Icon(Icons.brightness_auto_rounded), label: Text('System')),
+                ButtonSegment(value: ThemeMode.light, icon: Icon(Icons.light_mode_rounded), label: Text('Light')),
+                ButtonSegment(value: ThemeMode.dark, icon: Icon(Icons.dark_mode_rounded), label: Text('Dark')),
+              ],
+              selected: {settings.themeMode},
+              onSelectionChanged: (s) => settings.setThemeMode(s.first),
+            ),
+          ),
           const SectionHeader('Daily verse'),
           const VerseNotificationSettings(),
           const SectionHeader('Program reminders'),

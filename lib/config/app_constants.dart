@@ -39,4 +39,5 @@ class AppConstants {
   static const prefBatteryPromptShown = 'battery_prompt_shown';
   static const prefNotificationPromptShown = 'notification_prompt_shown';
   static const prefAutoPip = 'auto_pip';
+  static const prefThemeMode = 'theme_mode';
 }

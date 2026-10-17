@@ -33,7 +33,7 @@ class MoreScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: AppColors.headerGradient,
+                gradient: context.palette.headerGradient,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
@@ -65,8 +65,8 @@ class MoreScreen extends StatelessWidget {
                         Expanded(
                           child: FilledButton.icon(
                             style: FilledButton.styleFrom(
-                              backgroundColor: AppColors.gold,
-                              foregroundColor: const Color(0xFF231A00),
+                              backgroundColor: context.palette.goldFill,
+                              foregroundColor: context.palette.onGold,
                             ),
                             onPressed: () => Launcher.url(context, donationUrl),
                             icon: const Icon(Icons.favorite_rounded),
@@ -116,8 +116,8 @@ class MoreScreen extends StatelessWidget {
             onTap: () => push(const AboutScreen()),
           ),
           ListTile(
-            leading: const Icon(Icons.notifications_outlined),
-            title: const Text('Notification settings'),
+            leading: const Icon(Icons.settings_outlined),
+            title: const Text('Settings'),
             onTap: () => push(const SettingsScreen()),
           ),
           ListTile(
@@ -136,7 +136,7 @@ class MoreScreen extends StatelessWidget {
           Center(
             child: Text(
               '${AppConstants.appName} · v${app.appVersion}',
-              style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+              style: TextStyle(color: context.palette.textMuted, fontSize: 12),
             ),
           ),
         ],
@@ -179,11 +179,11 @@ class _SocialRow extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 24,
-                        backgroundColor: AppColors.surfaceHigh,
-                        child: Icon(e.key, color: AppColors.gold),
+                        backgroundColor: context.palette.surfaceHigh,
+                        child: Icon(e.key, color: context.palette.gold),
                       ),
                       const SizedBox(height: 6),
-                      Text(e.value.$1, style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
+                      Text(e.value.$1, style: TextStyle(fontSize: 12, color: context.palette.textMuted)),
                     ],
                   ),
                 ),

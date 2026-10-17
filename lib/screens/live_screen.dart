@@ -72,10 +72,10 @@ class LiveScreen extends StatelessWidget {
                   const SizedBox.shrink(),
                 if (player.audioOnly) ...[
                   const SizedBox(height: 14),
-                  const Text(
+                  Text(
                     'Audio-only mode hides the video. Playback continues with the screen off '
                     'and can be controlled from the notification.',
-                    style: TextStyle(color: AppColors.textMuted, fontSize: 12),
+                    style: TextStyle(color: context.palette.textMuted, fontSize: 12),
                   ),
                 ],
               ],

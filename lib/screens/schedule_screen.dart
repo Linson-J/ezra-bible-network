@@ -36,7 +36,7 @@ class ScheduleScreen extends StatelessWidget {
                           margin: const EdgeInsets.only(top: 2),
                           width: 4,
                           height: 4,
-                          decoration: const BoxDecoration(color: AppColors.gold, shape: BoxShape.circle),
+                          decoration: BoxDecoration(color: context.palette.gold, shape: BoxShape.circle),
                         ),
                     ],
                   ),
@@ -66,7 +66,7 @@ class _DayList extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(app.scheduleError!, style: const TextStyle(color: AppColors.textMuted)),
+            Text(app.scheduleError!, style: TextStyle(color: context.palette.textMuted)),
             const SizedBox(height: 12),
             FilledButton(onPressed: app.reloadSchedule, child: const Text('Retry')),
           ],
@@ -76,8 +76,8 @@ class _DayList extends StatelessWidget {
 
     final programs = app.programsFor(weekday);
     if (programs.isEmpty) {
-      return const Center(
-        child: Text('No programs scheduled.', style: TextStyle(color: AppColors.textMuted)),
+      return Center(
+        child: Text('No programs scheduled.', style: TextStyle(color: context.palette.textMuted)),
       );
     }
 

@@ -66,7 +66,7 @@ class _Row extends StatelessWidget {
             children: [
               Text(label,
                   style: TextStyle(
-                    color: highlight ? AppColors.gold : AppColors.textMuted,
+                    color: highlight ? context.palette.gold : context.palette.textMuted,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.2,
@@ -83,7 +83,7 @@ class _Row extends StatelessWidget {
                   [if (p.speaker.isNotEmpty) p.speaker, when].join(' · '),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+                  style: TextStyle(color: context.palette.textMuted, fontSize: 13),
                 ),
             ],
           ),
@@ -105,11 +105,11 @@ class _Thumb extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        gradient: AppColors.headerGradient,
+        gradient: context.palette.headerGradient,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Icon(highlight ? Icons.live_tv_rounded : Icons.schedule_rounded,
-          color: AppColors.gold, size: size * 0.45),
+          color: context.palette.gold, size: size * 0.45),
     );
     if (url.isEmpty) return fallback;
     return ClipRRect(

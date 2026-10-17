@@ -22,8 +22,8 @@ class PlayerControlsBar extends StatelessWidget {
             tooltip: player.isPlaying ? 'Pause' : 'Play',
             onPressed: loading ? null : player.togglePlay,
             style: IconButton.styleFrom(
-              backgroundColor: AppColors.gold,
-              foregroundColor: const Color(0xFF231A00),
+              backgroundColor: context.palette.goldFill,
+              foregroundColor: context.palette.onGold,
               minimumSize: const Size(48, 48),
             ),
             icon: Icon(player.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded, size: 28),
@@ -39,7 +39,7 @@ class PlayerControlsBar extends StatelessWidget {
             isSelected: player.audioOnly,
             onPressed: player.toggleAudioOnly,
             icon: const Icon(Icons.headphones_outlined),
-            selectedIcon: const Icon(Icons.headphones_rounded, color: AppColors.gold),
+            selectedIcon: Icon(Icons.headphones_rounded, color: context.palette.gold),
           ),
           if (player.pipSupported)
             IconButton(
@@ -69,9 +69,10 @@ class _GoLiveButton extends StatelessWidget {
       onPressed: enabled ? onPressed : null,
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        side: BorderSide(color: enabled ? AppColors.live : const Color(0xFF3A3670)),
+        side: BorderSide(color: enabled ? context.palette.live : context.palette.outline),
       ),
-      icon: Icon(Icons.circle, size: 10, color: enabled ? AppColors.live : Colors.white24),
+      icon: Icon(Icons.circle,
+          size: 10, color: enabled ? context.palette.live : context.palette.textMuted.withValues(alpha: 0.5)),
       label: const Text('Go Live'),
     );
   }

@@ -77,9 +77,9 @@ class _PrayerRequestScreenState extends State<PrayerRequestScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            const Text(
+            Text(
               '"Is any among you afflicted? let him pray." — James 5:13',
-              style: TextStyle(fontFamily: AppTheme.verseFont, color: AppColors.goldLight, fontSize: 15),
+              style: TextStyle(fontFamily: AppTheme.verseFont, color: context.palette.goldLight, fontSize: 15),
             ),
             const SizedBox(height: 20),
             TextFormField(
@@ -129,10 +129,10 @@ class _PrayerRequestScreenState extends State<PrayerRequestScreen> {
                   label: const Text('Send via email'),
                 ),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 'Your request opens in WhatsApp or your email app, ready to send.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.textMuted, fontSize: 12),
+                style: TextStyle(color: context.palette.textMuted, fontSize: 12),
               ),
             ],
           ],

@@ -23,10 +23,15 @@ class ProgramTile extends StatelessWidget {
     final p = program;
     return Container(
       decoration: BoxDecoration(
-        color: isCurrent ? AppColors.surfaceHigh : AppColors.surface,
+        color: isCurrent ? context.palette.surfaceHigh : context.palette.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isCurrent ? AppColors.gold : Colors.transparent,
+          // Light tiles need an edge against the near-white background.
+          color: isCurrent
+              ? context.palette.gold
+              : Theme.of(context).brightness == Brightness.light
+                  ? context.palette.outlineVariant
+                  : Colors.transparent,
           width: 1.5,
         ),
       ),
@@ -43,10 +48,10 @@ class ProgramTile extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 15,
-                      color: isCurrent ? AppColors.gold : AppColors.text,
+                      color: isCurrent ? context.palette.gold : context.palette.text,
                     )),
                 Text(formatHhmm(context, p.endTime),
-                    style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                    style: TextStyle(color: context.palette.textMuted, fontSize: 12)),
               ],
             ),
           ),
@@ -59,23 +64,23 @@ class ProgramTile extends StatelessWidget {
                     margin: const EdgeInsets.only(bottom: 6),
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: AppColors.live,
+                      color: context.palette.live,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: const Text('ON AIR',
-                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1)),
+                        style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1)),
                   ),
                 Text(p.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 if (p.speaker.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
-                    child: Text(p.speaker, style: const TextStyle(color: AppColors.goldLight, fontSize: 13)),
+                    child: Text(p.speaker, style: TextStyle(color: context.palette.goldLight, fontSize: 13)),
                   ),
                 if (p.description.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(p.description,
-                        style: const TextStyle(color: AppColors.textMuted, fontSize: 13, height: 1.35)),
+                        style: TextStyle(color: context.palette.textMuted, fontSize: 13, height: 1.35)),
                   ),
               ],
             ),
@@ -86,7 +91,7 @@ class ProgramTile extends StatelessWidget {
               onPressed: onToggleReminder,
               icon: Icon(
                 hasReminder ? Icons.notifications_active_rounded : Icons.notifications_none_rounded,
-                color: hasReminder ? AppColors.gold : AppColors.textMuted,
+                color: hasReminder ? context.palette.gold : context.palette.textMuted,
               ),
             ),
         ],

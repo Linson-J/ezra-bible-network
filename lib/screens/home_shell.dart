@@ -79,7 +79,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
       final open = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          icon: const Icon(Icons.battery_saver_rounded, color: AppColors.gold),
+          icon: Icon(Icons.battery_saver_rounded, color: context.palette.gold),
           title: const Text('Keep the stream playing'),
           content: const Text(
             'Android\'s battery optimisation can stop the live stream in the background '

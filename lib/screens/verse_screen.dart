@@ -21,12 +21,12 @@ class VerseScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Verse of the Day')),
       body: verse == null
-          ? const Center(child: CircularProgressIndicator(color: AppColors.gold))
+          ? Center(child: CircularProgressIndicator(color: context.palette.gold))
           : ListView(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
               children: [
                 Text(formatLongDate(DateTime.now()),
-                    style: const TextStyle(color: AppColors.textMuted, fontSize: 15)),
+                    style: TextStyle(color: context.palette.textMuted, fontSize: 15)),
                 const SizedBox(height: 14),
                 VerseCard(verse: verse, large: true),
                 const SizedBox(height: 16),
@@ -35,8 +35,8 @@ class VerseScreen extends StatelessWidget {
                     Expanded(
                       child: FilledButton.icon(
                         style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.gold,
-                          foregroundColor: const Color(0xFF231A00),
+                          backgroundColor: context.palette.goldFill,
+                          foregroundColor: context.palette.onGold,
                         ),
                         onPressed: () => SharePlus.instance.share(ShareParams(
                           text: '${verse.shareText}\n\nShared from ${AppConstants.appName}\n'
@@ -72,10 +72,10 @@ class VerseScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   'Scripture quotations from the King James Version (public domain).',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.textMuted, fontSize: 12),
+                  style: TextStyle(color: context.palette.textMuted, fontSize: 12),
                 ),
               ],
             ),

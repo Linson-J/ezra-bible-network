@@ -16,13 +16,9 @@ class VerseCard extends StatelessWidget {
     final textScale = large ? 1.0 : 0.72;
     return Container(
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF2B1F78), Color(0xFF16124A)],
-        ),
+        gradient: context.palette.verseGradient,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.gold.withValues(alpha: 0.35)),
+        border: Border.all(color: context.palette.gold.withValues(alpha: 0.35)),
       ),
       child: Material(
         type: MaterialType.transparency,
@@ -36,11 +32,11 @@ class VerseCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.auto_stories_rounded, color: AppColors.gold, size: 18),
+                    Icon(Icons.auto_stories_rounded, color: context.palette.gold, size: 18),
                     const SizedBox(width: 8),
                     Text('VERSE OF THE DAY',
                         style: TextStyle(
-                          color: AppColors.gold,
+                          color: context.palette.gold,
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.4,
@@ -49,7 +45,7 @@ class VerseCard extends StatelessWidget {
                 ),
                 SizedBox(height: large ? 22 : 12),
                 if (large)
-                  const Icon(Icons.format_quote_rounded, color: AppColors.gold, size: 36),
+                  Icon(Icons.format_quote_rounded, color: context.palette.gold, size: 36),
                 Text(
                   verse.text,
                   maxLines: large ? null : 4,
@@ -58,7 +54,7 @@ class VerseCard extends StatelessWidget {
                     fontFamily: AppTheme.verseFont,
                     fontSize: 26 * textScale,
                     height: 1.5,
-                    color: AppColors.text,
+                    color: context.palette.text,
                   ),
                 ),
                 SizedBox(height: large ? 20 : 10),
@@ -68,7 +64,7 @@ class VerseCard extends StatelessWidget {
                     fontFamily: AppTheme.verseFont,
                     fontSize: large ? 20 : 15,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.goldLight,
+                    color: context.palette.goldLight,
                   ),
                 ),
               ],

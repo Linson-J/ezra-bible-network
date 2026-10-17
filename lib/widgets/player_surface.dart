@@ -67,7 +67,7 @@ class _AudioOnlyArt extends StatelessWidget {
     // Absorbs taps so the hidden video's controls don't pop up.
     return AbsorbPointer(
       child: DecoratedBox(
-        decoration: const BoxDecoration(gradient: AppColors.headerGradient),
+        decoration: const BoxDecoration(gradient: AppColors.brandGradient),
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,

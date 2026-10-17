@@ -18,9 +18,9 @@ class AboutScreen extends StatelessWidget {
         children: [
           Center(child: Image.asset('assets/images/logo.png', height: 120)),
           const SizedBox(height: 16),
-          const Center(
+          Center(
             child: Text(AppConstants.appName,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.gold)),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: context.palette.gold)),
           ),
           const SizedBox(height: 24),
           Text(c.about, style: const TextStyle(fontSize: 16, height: 1.6)),
@@ -29,9 +29,9 @@ class AboutScreen extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.place_rounded, color: AppColors.gold),
+                Icon(Icons.place_rounded, color: context.palette.gold),
                 const SizedBox(width: 12),
-                Expanded(child: Text(c.address, style: const TextStyle(color: AppColors.textMuted, height: 1.4))),
+                Expanded(child: Text(c.address, style: TextStyle(color: context.palette.textMuted, height: 1.4))),
               ],
             ),
           ],

@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/app_constants.dart';
@@ -32,6 +32,17 @@ class SettingsService extends ChangeNotifier {
 
   Future<void> setAutoPip(bool v) async {
     await _prefs.setBool(AppConstants.prefAutoPip, v);
+    notifyListeners();
+  }
+
+  /// Light, dark or follow the system (default).
+  ThemeMode get themeMode => ThemeMode.values.firstWhere(
+        (m) => m.name == _prefs.getString(AppConstants.prefThemeMode),
+        orElse: () => ThemeMode.system,
+      );
+
+  Future<void> setThemeMode(ThemeMode m) async {
+    await _prefs.setString(AppConstants.prefThemeMode, m.name);
     notifyListeners();
   }
 
