@@ -41,7 +41,9 @@ class EzraApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = context.select<SettingsService, ThemeMode>((s) => s.themeMode);
+    final themeMode = context.select<SettingsService, ThemeMode>(
+      (s) => s.themeMode,
+    );
     return MaterialApp(
       title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
@@ -63,7 +65,11 @@ class _IosScrollBehavior extends MaterialScrollBehavior {
       const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
 
   @override
-  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) => child;
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) => child;
 }
 
 /// Shown instead of the app when .env is missing or invalid.
@@ -85,11 +91,21 @@ class ConfigErrorApp extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.error_outline_rounded, color: AppColors.live, size: 48),
+                const Icon(
+                  Icons.error_outline_rounded,
+                  color: AppColors.live,
+                  size: 48,
+                ),
                 const SizedBox(height: 16),
-                const Text('Configuration error', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+                const Text(
+                  'Configuration error',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+                ),
                 const SizedBox(height: 12),
-                SelectableText(message, style: const TextStyle(fontSize: 15, height: 1.5)),
+                SelectableText(
+                  message,
+                  style: const TextStyle(fontSize: 15, height: 1.5),
+                ),
               ],
             ),
           ),

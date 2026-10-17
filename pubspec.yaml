@@ -45,6 +45,7 @@ flutter:
     - assets/images/
     - assets/instagram.png
     - assets/youtube.png
+    - assets/apple.png # WhatsApp logo
     # Lottie animations
     - assets/likes.json
     - assets/live-streaming.json

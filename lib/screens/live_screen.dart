@@ -7,6 +7,7 @@ import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_bottom_bar.dart';
 import '../widgets/announcement_banner.dart';
+import '../widgets/call_in_card.dart';
 import '../widgets/lottie_badge.dart';
 import '../widgets/player_controls_bar.dart';
 import '../widgets/player_surface.dart';
@@ -32,7 +33,9 @@ class LiveScreen extends StatelessWidget {
     if (player.inPip) {
       return ColoredBox(
         color: Colors.black,
-        child: Center(child: AspectRatio(aspectRatio: 16 / 9, child: surface)),
+        child: Center(
+          child: AspectRatio(aspectRatio: 16 / 9, child: surface),
+        ),
       );
     }
 
@@ -66,6 +69,10 @@ class LiveScreen extends StatelessWidget {
                   VerseCard(verse: app.todayVerse!, onTap: () => app.tab.value = 1)
                 else
                   const SizedBox.shrink(),
+                if (app.content.phone.isNotEmpty) ...[
+                  const SizedBox(height: 14),
+                  CallInCard(phone: app.content.phone, whatsapp: app.content.whatsapp),
+                ],
                 if (player.audioOnly) ...[
                   const SizedBox(height: 14),
                   Text(
